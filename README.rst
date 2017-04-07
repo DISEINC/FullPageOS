@@ -19,7 +19,10 @@ Dependencies are:
 * Scrot
 
 In addition, the OS needs to be updated (`apt-get update && apt-get upgrade`), and `raspi-config` needs to be updated as well.
-In order to install nodejs, see the `install-xpress`-script for reference. Note that all the commands used there must
+
+In order to install nodejs, see the `install-xpress`-script for reference.
+
+Note that all the commands used there must
 be executed with admin/root privileges. There might be issues with piping the curl result to bash - In that case,
 change it to `curl -sL https://..... | sh`.
 
