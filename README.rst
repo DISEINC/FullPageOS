@@ -1,14 +1,13 @@
 FullPageOS
 ==========
 
-.. image:: https://raw.githubusercontent.com/guysoft/FullPageOS/devel/media/FullPageOS.png
-.. :scale: 50 %
-.. :alt: FullPageOS logo
-
 A `Raspberry Pi <http://www.raspberrypi.org/>`_ distribution to display one webpage in full screen. It includes `Chromium <https://www.chromium.org/>`_ out of the box and the scripts necessary to load it at boot.
 This repository contains the source script to generate the distribution out of an existing `Raspbian <http://www.raspbian.org/>`_ distro image.
 
-FullPageOS is a fork of `OctoPi <https://github.com/guysoft/OctoPi>`_
+This is a fork from https://github.com/guysoft/FullPageOS, branded and adapted for the DISE Xpress Digital Signage software.
+
+The current image used is 0.7.0RC1 Nightly, adapted post-hoc. Raw build available here: http://docstech.net/FullPageOS/nightly/2016-12-27_2016-11-25-fullpageos-jessie-lite-0.7.0_RC1.zip.
+The current image used needs to be adapted for each screen, as it uses a static ethernet configuration set in /boot/fullpageos-network.
 
 Where to get it?
 ----------------
@@ -30,7 +29,6 @@ Features
 
 * Loads Chromium at boot in full screen
 * Webpage can be changed from /boot/fullpageos.txt
-* Default app is `FullPageDashboard <https://github.com/amitdar/FullPageDashboard>`_, which lets you add multiple tabs changes that switch automatically.
 * Ships with preconfigured `X11VNC <http://www.karlrunge.com/x11vnc/>`_, for remote connection (password 'raspberry')
 
 Developing
@@ -54,14 +52,14 @@ Build requires about 2.5 GB of free space available.
 You can build it by issuing the following commands::
 
     sudo apt-get install realpath qemu-user-static
-    
+
     git clone https://github.com/guysoft/FullPageOS.git
     cd FullPageOS/src/image
     curl -J -O -L  http://downloads.raspberrypi.org/raspbian_latest
     cd ..
     sudo modprobe loop
     sudo bash -x ./build
-    
+
 Building FullPageOS Variants
 ~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -70,7 +68,7 @@ FullPageOS supports building variants, which are builds with changes from the ma
 To build a variant use::
 
     sudo bash -x ./build [Variant]
-    
+
 Building Using Vagrant
 ~~~~~~~~~~~~~~~~~~~~~~
 There is a vagrant machine configuration to let build FullPageOS in case your build environment behaves differently. Unless you do extra configuration, vagrant must run as root to have nfs folder sync working.
