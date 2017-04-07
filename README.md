@@ -17,6 +17,7 @@ Dependencies are:
 - Node.js
 - Unclutter
 - Scrot
+- pm2
 
 In addition, the OS needs to be updated (`apt-get update && apt-get upgrade`), and `raspi-config` needs to be updated as well.
 
@@ -25,6 +26,8 @@ In order to install nodejs, see the `install-xpress`-script for reference.
 Note that all the commands used there must
 be executed with admin/root privileges. There might be issues with piping the curl result to bash - In that case,
 change it to `curl -sL https://..... | sh`.
+
+This OS is using PM2 to manage Xpressly as a service, with instructions for running pm2 as a systemd service here: https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
 
 Where to get it?
 ----------------
