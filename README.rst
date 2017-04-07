@@ -9,6 +9,20 @@ This is a fork from https://github.com/guysoft/FullPageOS, branded and adapted f
 The current image used is 0.7.0RC1 Nightly, adapted post-hoc. Raw build available here: http://docstech.net/FullPageOS/nightly/2016-12-27_2016-11-25-fullpageos-jessie-lite-0.7.0_RC1.zip.
 The current image used needs to be adapted for each screen, as it uses a static ethernet configuration set in /boot/fullpageos-network.
 
+In order to run DISE Xpress until or unless a URL-launcher is added, the start-up should be changed to launch
+`go.dise.tv` with the request parameter `serial=$SERIAL` and `platform=raspbian`. For reference, see the previous
+script used, located at `xpress/install-xpress`.
+
+Dependencies are:
+* Node.js
+* Unclutter
+* Scrot
+
+In addition, the OS needs to be updated (`apt-get update && apt-get upgrade`), and `raspi-config` needs to be updated as well.
+In order to install nodejs, see the `install-xpress`-script for reference. Note that all the commands used there must
+be executed with admin/root privileges. There might be issues with piping the curl result to bash - In that case,
+change it to `curl -sL https://..... | sh`.
+
 Where to get it?
 ----------------
 

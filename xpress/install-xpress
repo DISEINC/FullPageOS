@@ -1,0 +1,64 @@
+if [ "$1" != "--app-only" ]; then
+  # ------------------------------------- #
+  # Install and set up some dependencies	#
+  # For smooth operating procedures, 	#
+  # we need: 				#
+  # * Chromium (to run our app)		#
+  # * Unclutter (to hide cursor) 		#
+  # * Node.js (to run platform service) 	#
+  # * scrot (to take screenshots) 	#
+  #					#
+  # Install them largest-first and 	#
+  # clean inbetween to keep size small	#
+  # ------------------------------------- #
+
+  echo Installing dependencies ...
+
+  echo Installing Chromium ...
+  apt-get install chromium-browser
+  apt-get clean
+  echo Chromium installed!
+
+  echo Installing Nodejs ...
+  curl -sL https://deb.nodesource.com/setup_7.x | bash -E bash -
+  apt-get install -y nodejs
+  apt-get clean
+  echo Nodejs installed!
+
+  echo Installing Scrot ...
+  apt-get install scrot
+  apt-get clean
+  echo Scrot installed!
+
+  echo Installing Unclutter ...
+  apt-get install unclutter
+  apt-get clean
+
+  echo Setup unclutter directive
+  AUTOSTART=/etc/xdg/lxsession/LXDE-pi/autostart
+  UNCLUTTER_DIRECTIVE="@unclutter -idle 0.1 -root"
+
+  if ! grep -q "$UNCLUTTER_DIRECTIVE" $AUTOSTART; then
+    echo $UNCLUTTER_DIRECTIVE >> $AUTOSTART
+  fi
+  echo Unclutter installed!
+fi
+
+echo Installing DISE Xpress ...
+
+XPRESS_PATH=/bin/xpress
+XPRESS="SERIAL=$(cat /proc/cpuinfo | sed 's/[\t]//g' | grep -Po '(?<=Serial: )[a-z0-9]+')
+
+if echo $1 | grep -q '?'; then
+  PARAM='&serial='
+else
+  PARAM='?serial='
+fi
+
+chromium-browser --kiosk http://go.dise.tv$1$PARAM$SERIAL"
+
+
+echo "$XPRESS" > $XPRESS_PATH
+chmod a+x $XPRESS_PATH
+
+echo Done!
