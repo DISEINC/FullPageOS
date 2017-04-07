@@ -14,9 +14,9 @@ In order to run DISE Xpress until or unless a URL-launcher is added, the start-u
 script used, located at `xpress/install-xpress`.
 
 Dependencies are:
-* Node.js
-* Unclutter
-* Scrot
+- Node.js
+- Unclutter
+- Scrot
 
 In addition, the OS needs to be updated (`apt-get update && apt-get upgrade`), and `raspi-config` needs to be updated as well.
 
