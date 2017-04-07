@@ -1,0 +1,64 @@
+# IMAGE
+**images/raspbian-dise-xpress.$date.img**, see *Setting up the Raspbian* below
+
+# SETTING UP THE RASPBIAN
+
+OS: Raspbian with PIXEL
+Dependencies: Nodejs, chromium, scrot, unclutter
+App: DISE Xpress
+
+There is an install script available, `install-xpress`, that will fetch all the dependencies and install DISE Xpress.
+
+After installation, a few tweaks should be made:
+* Splash screen updated to custom splash screen (`sudo cp "$path_to_image/Splash Screen.png" /usr/share/plymouth/themes/pix/splash.png`)
+* Wallpaper set to custom wallpaper
+* Disable screensaver
+* Run DISE Xpress once. Chromium will prompt for permissions to use storage - Accept.
+* Use `raspi-config` to set resolution and set memory split to 128, if not done already
+
+After these steps, an image can be created (see below). If it is a production system, you may use `raspi-config` to
+expand the filesystem.
+
+Coming features: Daemonization and a platform service providing hardware interfaces.
+
+# CREATING A DISK IMAGE FROM AN SD CARD
+
+Straight-up using Win32DiskImager to create an image will cause the whole device to be copied,
+regardless of how much of it is actually allocated. This process requires linux and `dd`, as
+Bash on Ubuntu on Windows can't access disk drives.
+
+You'll need:
+* A computer or VM running linux
+* An SD-card with your OS (and un-expanded FS) and a reader
+* A USB storage device
+
+This guide will assume that your OS is /dev/sda, the Pi is /dev/sdb and that the storage device is /dev/sdc.
+It will also assume that the storage device has a partition /dev/sdc1. Adjust accordingly if your setup differs.
+
+1. Fire up the machine and insert the SD card and USB device.
+2. Run `sudo fdisk -l` to list disks and their partitions.
+3. Make note of where allocated space ends on the Pi, e.g.
+```
+Device    Boot    Start   End     Sectors   Size  Id  Type
+/dev/sdb1         8192    137215  129024    63M   c   W95 FAT32 (LBA)
+/dev/sdb2         137216  4331519 4194304   2G    83  Linux
+```
+
+In this case `fdisk -l` tells us that allocated space ends at `4331519`.
+
+4. Mount the storage device partition with `sudo mount /dev/sdc1 /mnt`
+5. Write the image with `dd if=/dev/sdb of=/mnt/$IMAGE.img count=$END`
+Where $IMAGE is the name of the resulting file, and $END the number we took note of earlier.
+6. Unmount the storage device with `sudo umount /dev/sdc1`
+
+# HOW TO INSTALL XPRESS ON RASPBIAN
+
+1. Download the installer, `install-xpress`
+2. Make the installer executable with `sudo chmod a+x ./install-xpress`
+3. Open a superuser shell: `sudo su`
+4. Run the installer: `./install-xpress`
+5. Exit the superuser shell: `exit`
+6. If necessary, see additional setup steps above (*Setting up the raspbian*)
+7. Run DISE Xpress: `xpress`
+  7.1 DISE Xpress fetches from *http://go.dise.tv*. To get a specific version or supply a parameter, simply append
+  that to the statement, e.g. `xpress /beta/1.9.1?onlinePlayer=1`
