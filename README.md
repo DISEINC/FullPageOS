@@ -33,7 +33,7 @@ Dependencies are:
 - pm2
 
 If it's an NEC device, using the NEC-specific Xpressly API,
-you will also need `python-serial` and the NEC Python SDK. 
+you will also need `python-serial` and the NEC Python SDK.
 
 In addition, the OS needs to be updated (`apt-get update && apt-get upgrade`), and `raspi-config` needs to be updated as well.
 
