@@ -9,6 +9,19 @@ This is a fork from https://github.com/guysoft/FullPageOS, branded and adapted f
 The current image used is 0.7.0RC1 Nightly, adapted post-hoc. Raw build available here: http://docstech.net/FullPageOS/nightly/2016-12-27_2016-11-25-fullpageos-jessie-lite-0.7.0_RC1.zip.
 The current image used needs to be adapted for each screen, as it uses a static ethernet configuration set in /boot/fullpageos-network.
 
+In addition, the following changes need to be be made to the image
+- In `/boot/cmdline.txt`:
+  - During development: remove the command `init=/usr/lib/raspi-config/init_resize.sh` to prevent the image from expanding on first launch.
+  - Remove the command `console=serial0,115200`
+- In `config.txt`:
+  - Add the line `hdmi_pixel_encoding=2`
+  - Add the line `dt_overlay=lirc-rpi`
+  - Add the line `disable_overscan=1`
+  - Add the line `enable_uart=1`
+  - Add the line `core_freq=250`
+  - Add the line `gpu_mem=256`
+
+
 In order to run DISE Xpress until or unless a URL-launcher is added, the start-up should be changed to launch
 `go.dise.tv` with the request parameter `serial=$SERIAL` and `platform=raspbian`. For reference, see the previous
 script used, located at `xpress/install-xpress`.
@@ -18,6 +31,9 @@ Dependencies are:
 - Unclutter
 - Scrot
 - pm2
+
+If it's an NEC device, using the NEC-specific Xpressly API,
+you will also need `python-serial` and the NEC Python SDK. 
 
 In addition, the OS needs to be updated (`apt-get update && apt-get upgrade`), and `raspi-config` needs to be updated as well.
 
@@ -41,10 +57,17 @@ Nightly builds are available `here <http://docstech.net/FullPageOS/nightly/>`_ (
 How to use it?
 --------------
 
-#. Unzip the image and install it to an SD card  [like any other Raspberry Pi image](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
-#. Configure your WiFi by editing ``fullpageos-network.txt`` on the root of the flashed card when using it like a flash drive
-#. Boot the Pi from the SD card
-#. Log into your Pi via SSH (it is located at ``fullpageos.local`` `if your computer supports bonjour <https://learn.adafruit.com/bonjour-zeroconf-networking-for-windows-and-linux/overview>`_ or the IP address assigned by your router), default username is "pi", default password is "raspberry", change the password using the ``passwd`` command and expand the filesystem of the SD card through the corresponding option when running ``sudo raspi-config``.
+1. Unzip the image and install it to an SD card  [like any other Raspberry Pi image](https://www.raspberrypi.org/documentation/installation/installing-images/README.md)
+2. Configure your WiFi by editing `fullpageos-network.txt` on the root of the flashed card when using it like a flash drive
+3. Boot the Pi from the SD card
+4. Log into your Pi via SSH (it is located at `fullpageos.local` [if your computer supports bonjour](https://learn.adafruit.com/bonjour-zeroconf-networking-for-windows-and-linux/overview) or the IP address assigned by your router). Default username is "pi", default password is "raspberry", change the password using the `passwd` command and expand the filesystem of the SD card through the corresponding option when running `sudo raspi-config`.
+
+Requirements
+------------
+* Raspberrypi 2 and newser or device running Armbian, Older Rasperry Pis are not currently supported.  See https://github.com/guysoft/FullPageOS/issues/12 and
+https://github.com/guysoft/FullPageOS/issues/43.
+* 2A power supply
+
 
 Features
 --------
