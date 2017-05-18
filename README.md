@@ -7,45 +7,39 @@ This repository contains the source script to generate the distribution out of a
 This is a fork from https://github.com/guysoft/FullPageOS, branded and adapted for the DISE Xpress Digital Signage software.
 
 The current image used is 0.7.0RC1 Nightly, adapted post-hoc. Raw build available here: http://docstech.net/FullPageOS/nightly/2016-12-27_2016-11-25-fullpageos-jessie-lite-0.7.0_RC1.zip.
-The current image used needs to be adapted for each screen, as it uses a static ethernet configuration set in /boot/fullpageos-network.
 
-In addition, the following changes need to be be made to the image
-- In `/boot/cmdline.txt`:
-  - During development: remove the command `init=/usr/lib/raspi-config/init_resize.sh` to prevent the image from expanding on first launch.
-  - Remove the command `console=serial0,115200`
-- In `config.txt`:
-  - Add the line `hdmi_pixel_encoding=2`
-  - Add the line `dt_overlay=lirc-rpi`
-  - Add the line `disable_overscan=1`
-  - Add the line `enable_uart=1`
-  - Add the line `core_freq=250`
-  - Add the line `gpu_mem=256`
+# Creating A Disk Image
+
+Straight-up using Win32DiskImager to create an image will cause the whole device to be copied,
+regardless of how much of it is actually allocated. This process requires linux and `dd`, as
+Bash on Ubuntu on Windows can't access disk drives.
+
+You'll need:
+* A computer or VM running linux
+* An SD-card with your OS (and un-expanded FS) and a reader
+* A USB storage device
+
+This guide will assume that your OS is /dev/sda, the Pi is /dev/sdb and that the storage device is /dev/sdc.
+It will also assume that the storage device has a partition /dev/sdc1. Adjust accordingly if your setup differs.
+
+1. Fire up the machine and insert the SD card and USB device.
+2. Run `sudo fdisk -l` to list disks and their partitions.
+3. Make note of where allocated space ends on the Pi, e.g.
+```
+Device    Boot    Start   End     Sectors   Size  Id  Type
+/dev/sdb1         8192    137215  129024    63M   c   W95 FAT32 (LBA)
+/dev/sdb2         137216  4331519 4194304   2G    83  Linux
+```
+
+In this case `fdisk -l` tells us that allocated space ends at `4331519`.
+
+4. Mount the storage device partition with `sudo mount /dev/sdc1 /mnt`
+5. Write the image with `dd if=/dev/sdb of=/mnt/$IMAGE.img count=$END`
+Where $IMAGE is the name of the resulting file, and $END the number we took note of earlier.
+6. Unmount the storage device with `sudo umount /dev/sdc1`
 
 
-In order to run DISE Xpress until or unless a URL-launcher is added, the start-up should be changed to launch
-`go.dise.tv` with the request parameter `serial=$SERIAL` and `platform=raspbian`. For reference, see the previous
-script used, located at `xpress/install-xpress`.
-
-Dependencies are:
-- Node.js
-- Unclutter
-- Scrot
-- pm2
-
-If it's an NEC device, using the NEC-specific Xpressly API,
-you will also need `python-serial` and the NEC Python SDK.
-
-In addition, the OS needs to be updated (`apt-get update && apt-get upgrade`), and `raspi-config` needs to be updated as well.
-
-In order to install nodejs, see the `install-xpress`-script for reference.
-
-Note that all the commands used there must
-be executed with admin/root privileges. There might be issues with piping the curl result to bash - In that case,
-change it to `curl -sL https://..... | sh`.
-
-This OS is using PM2 to manage Xpressly as a service, with instructions for running pm2 as a systemd service here: https://www.digitalocean.com/community/tutorials/how-to-set-up-a-node-js-application-for-production-on-ubuntu-16-04
-
-Xpressly should be installed in `/var/www/xpressly`.
+# Original documentation
 
 Where to get it?
 ----------------
