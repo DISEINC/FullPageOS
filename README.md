@@ -6,7 +6,8 @@ This repository contains the source script to generate the distribution out of a
 
 This is a fork from https://github.com/guysoft/FullPageOS, branded and adapted for the DISE Xpress Digital Signage software.
 
-The current image used is 0.7.0RC1 Nightly, adapted post-hoc. Raw build available here: http://docstech.net/FullPageOS/nightly/2016-12-27_2016-11-25-fullpageos-jessie-lite-0.7.0_RC1.zip.
+The current image used is 0.6.0, adapted post-hoc. Raw build available here:
+http://docstech.net/FullPageOS/2016-05-10-fullpageos-jessie-lite-0.6.0.zip.
 
 # Creating A Disk Image
 
