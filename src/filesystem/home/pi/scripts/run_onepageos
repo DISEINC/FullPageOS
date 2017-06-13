@@ -3,6 +3,16 @@ xset s off         # don't activate screensaver
 xset -dpms         # disable DPMS (Energy Star) features.
 xset s noblank     # don't blank the video device
 
+SERIAL=$(cat /proc/cpuinfo | sed 's/[\t]//g' | grep -Po '(?<=Serial: )[a-z0-9]+')
+URL=$(head -n 1 /boot/fullpageos.txt)
+if echo $URL | grep -q '?'; then
+  URL="$URL&serial=$SERIAL&platform=raspbian"
+else
+  URL="$URL?serial=$SERIAL&platform=raspbian"
+fi
+
+CHROMEPARAM=$(head -n 1 /boot/chromium-parameters.txt)
+
 matchbox-window-manager &
 x11vnc -many -rfbauth /home/pi/.vnc/passwd &
 while true
@@ -10,7 +20,7 @@ do
     if [ $(curl -sL -w "%{http_code}\\n" "http://localhost/FullPageDashboard" -o /dev/null) == "200" ]; then
       (sleep 15 ; /home/pi/scripts/fullscreen) &
       xdotool mousemove 9000 9000
-      chromium-browser --kiosk --app=$(head -n 1 /boot/fullpageos.txt) $(head -n 1 /boot/chromium-parameters.txt)
+      chromium-browser --kiosk --app="$URL" "$CHROMEPARAM"
     fi
     sleep 1
 done
