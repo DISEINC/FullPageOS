@@ -14,13 +14,9 @@ fi
 CHROMEPARAM=$(head -n 1 /boot/chromium-parameters.txt)
 
 matchbox-window-manager &
-x11vnc -many -rfbauth /home/pi/.vnc/passwd &
+
 while true
 do
-    if [ $(curl -sL -w "%{http_code}\\n" "http://localhost/FullPageDashboard" -o /dev/null) == "200" ]; then
-      (sleep 15 ; /home/pi/scripts/fullscreen) &
-      xdotool mousemove 9000 9000
-      chromium-browser --kiosk --app="$URL" "$CHROMEPARAM"
-    fi
+    chromium-browser --kiosk --app="$URL" "$CHROMEPARAM"
     sleep 1
 done
