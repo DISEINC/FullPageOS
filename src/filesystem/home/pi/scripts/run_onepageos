@@ -3,10 +3,20 @@ xset s off         # don't activate screensaver
 xset -dpms         # disable DPMS (Energy Star) features.
 xset s noblank     # don't blank the video device
 
+SERIAL=$(cat /proc/cpuinfo | sed 's/[\t]//g' | grep -Po '(?<=Serial: )[a-z0-9]+')
+URL=$(head -n 1 /boot/fullpageos.txt)
+if echo $URL | grep -q '?'; then
+  URL="$URL&serial=$SERIAL&platform=raspbian"
+else
+  URL="$URL?serial=$SERIAL&platform=raspbian"
+fi
+
+CHROMEPARAM=$(head -n 1 /boot/chromium-parameters.txt)
+
 matchbox-window-manager &
 
 while true
 do
-    chromium-browser --kiosk --app=$(head -n 1 /boot/fullpageos.txt)
+    chromium-browser --kiosk --app="$URL" "$CHROMEPARAM"
     sleep 1
 done

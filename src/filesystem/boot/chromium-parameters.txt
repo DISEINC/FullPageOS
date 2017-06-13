@@ -1,0 +1,1 @@
+--enable-gpu-rasterization --enable-native-gpu-memory-buffers
